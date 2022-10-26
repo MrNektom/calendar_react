@@ -1,0 +1,24 @@
+.Calendar {
+  flex: 1;
+  border-left: 1px solid #ccc;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: auto;
+  scrollbar-color: #ccc transparent;
+}
+
+.Calendar::-webkit-scrollbar {
+  background-color: transparent;
+  width: 10px;
+}
+.Calendar::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+.WeekRow {
+  display: flex;
+}
+
+.WeekRow > * {
+  flex: 1;
+  text-align: center;
+}

@@ -1,0 +1,22 @@
+.dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: white;
+  border-radius: 8px;
+  user-select: none;
+  box-shadow: 0 2px 16px #0005;
+}
+
+.dialog_header {
+  padding: 8px 16px;
+}
+.dialog_content {
+  user-select: auto;
+  padding: 16px;
+}
+.dialog_footer {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 8px 16px;
+}

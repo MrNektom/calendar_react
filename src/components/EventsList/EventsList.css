@@ -1,0 +1,43 @@
+.EventsList {
+  display: flex;
+  flex-direction: column;
+  width: 256px;
+  overflow: auto;
+  place-items: top;
+}
+.EventsList::-webkit-scrollbar {
+  width: 0;
+}
+.EventsList__create_event_btn {
+  position: sticky;
+  top: 8px;
+  left: 0;
+  margin: 8px;
+  box-shadow: 0px -40px 10px 50px #fff;
+}
+
+.EventsList__item {
+  display: flex;
+  margin: 5px 10px;
+  padding: 8px 0;
+  background-color: var(--accent-color);
+  color: aliceblue;
+  box-shadow: 0 0 5px #0004;
+  border-radius: 8px;
+}
+
+.EventsList__item__title,
+.EventsList__item__description,
+.EventsList__item__datetime {
+  padding: 0 8px;
+}
+.EventsList__item__title {
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.EventsList__item__datetime {
+  font-weight: 100;
+  font-size: small;
+  color: aliceblue;
+}

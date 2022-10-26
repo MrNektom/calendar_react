@@ -1,0 +1,17 @@
+#root {
+  margin: 0;
+}
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  max-height: 100vh;
+  outline: 1px solid orange;
+}
+
+.App__content {
+  display: flex;
+  height: calc(100% - 50px);
+  flex: 1;
+}

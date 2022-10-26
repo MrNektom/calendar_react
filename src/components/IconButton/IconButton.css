@@ -1,0 +1,12 @@
+@import "material-icons/iconfont/filled.css";
+
+.IconButton {
+  width: 30px;
+  height: 30px;
+  padding: 2px 0;
+  margin: 8px 4px;
+}
+
+.IconButton .material-icons {
+  font-size: 20px;
+}
