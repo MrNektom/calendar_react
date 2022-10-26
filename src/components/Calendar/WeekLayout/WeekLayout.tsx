@@ -1,9 +1,14 @@
+import { useStore } from "effector-react";
 import React from "react";
+import { match } from "ts-pattern";
+import { $eventsList, IUserEvent } from "../../../store/store";
 import { range } from "../../../utils/range";
+import { EventLabel } from "../../EventsList/EventLabel/EventLabel";
 import { weekdays } from "../Calendar";
 import "./WeekLayout.css";
 
 export function WeekLayout({ date }: { date: Date }) {
+  const eventsList = useStore($eventsList);
   const now = new Date();
   const [days, today] = computeWeekdays(date);
   return (
@@ -30,12 +35,55 @@ export function WeekLayout({ date }: { date: Date }) {
                   <HoursIndicator minuts={now.getMinutes()} />
                 )}
                 {x === 0 ? y : ""}
+
+                {x > 0 && (
+                  <EventsLabels
+                    year={date.getFullYear()}
+                    month={date.getMonth()}
+                    date={days[x - 1]}
+                    events={eventsList}
+                    hours={y}
+                  />
+                )}
               </div>
             ))}
           </div>
         ))}
       </div>
     </div>
+  );
+}
+
+function EventsLabels({
+  year,
+  month,
+  date,
+  hours,
+  events,
+}: {
+  year: number;
+  month: number;
+  date: number;
+  hours: number;
+  events: IUserEvent[];
+}) {
+  const evList = events.map(
+    (ev) => [new Date(ev.date), ev] as [Date, IUserEvent]
+  );
+  return (
+    <>
+      {evList
+        .filter(
+          ([d]) =>
+            d.getFullYear() === year &&
+            d.getMonth() === month &&
+            d.getDate() === date &&
+            d.getHours() === hours
+        )
+        .map(([_, ev]) => (
+          <EventLabel key={ev.id} event={ev} />
+        ))}
+    </>
   );
 }
 

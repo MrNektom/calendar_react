@@ -4,6 +4,7 @@
   width: 256px;
   overflow: auto;
   place-items: top;
+  scroll-behavior: smooth;
 }
 .EventsList::-webkit-scrollbar {
   width: 0;
@@ -24,6 +25,12 @@
   color: aliceblue;
   box-shadow: 0 0 5px #0004;
   border-radius: 8px;
+  transition-property: transform, background-color;
+  transition-duration: 0.5s;
+}
+.EventsList__item.highlight {
+  transform: scale(1.06);
+  background-color: rgb(88, 122, 136);
 }
 
 .EventsList__item__title,

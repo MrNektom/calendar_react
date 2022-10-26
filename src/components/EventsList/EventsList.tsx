@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {
   $eventsList,
   eventAdded,
+  eventEdited,
   eventRemoved,
   IUserEvent,
   last_id as lid,
@@ -16,30 +17,61 @@ import "./EventsList.css";
 
 let last_id = lid;
 
+export const $evtToShow = createStore<number>(-1);
+export const eventShows = createEvent<number>();
+
+$evtToShow.on(eventShows, (_, id) => id);
+
 export function EventsList() {
   const [showDialog, setShowDialog] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [editing, setEditing] = useState<[number, IUserEvent] | null>(null);
   const events = useStore($eventsList);
+  const evtToShow = useStore($evtToShow);
   const addEvent = useEvent(eventAdded);
   const removeEvent = useEvent(eventRemoved);
+  const editEvent = useEvent(eventEdited);
+
+  const showEvent = useEvent(eventShows);
 
   function handleAddEvent() {
     setShowDialog(false);
     setTitle("");
     setDescription("");
-    addEvent({
-      id: ++last_id,
-      title,
-      date: Date.now(),
-      description,
-      color: `hsl(${Math.round(Math.random() * 360)}, 100%, 45%)`,
-    });
+    if (editing) {
+      setEditing(null);
+      editEvent([
+        editing[0],
+        {
+          title,
+          description,
+          id: editing[1].id,
+          color: editing[1].color,
+          date: editing[1].date,
+        },
+      ]);
+    } else
+      addEvent({
+        id: ++last_id,
+        title,
+        date: Date.now(),
+        description,
+        color: `hsl(${Math.round(Math.random() * 360)}, 100%, 45%)`,
+      });
   }
   function handleCancel() {
+    if (editing) setEditing(null);
     setShowDialog(false);
     setTitle("");
     setDescription("");
+  }
+
+  function startEditing(index: number) {
+    setEditing([index, events[index]]);
+    setTitle(events[index].title);
+    setDescription(events[index].description);
+    setShowDialog(true);
   }
   return (
     <div className="EventsList">
@@ -58,7 +90,14 @@ export function EventsList() {
       </button>
 
       {events.map((e, i) => (
-        <EventsListItem key={e.id} event={e} onRemove={() => removeEvent(i)} />
+        <EventsListItem
+          key={e.id}
+          event={e}
+          scrollIntroView={e.id === evtToShow}
+          onRemove={() => removeEvent(i)}
+          onEdit={() => startEditing(i)}
+          onView={() => showEvent(-1)}
+        />
       ))}
     </div>
   );
@@ -66,14 +105,35 @@ export function EventsList() {
 
 function EventsListItem({
   event,
+  scrollIntroView,
   onRemove,
+  onEdit,
+  onView,
 }: {
   event: IUserEvent;
+  scrollIntroView: boolean;
   onRemove?: () => void;
+  onEdit?: () => void;
+  onView?: () => void;
 }) {
+  const [highlight, setHighlight] = useState(false);
+  function handleScroll(el: HTMLElement) {
+    el.scrollIntoView({ block: "center" });
+    onView && onView();
+    setHighlight(true);
+  }
+
+  if (highlight) {
+    setTimeout(() => {
+      setHighlight(false);
+    }, 1000);
+  }
   return (
     <div
-      className="EventsList__item" /*style={{ backgroundColor: event.color }} */
+      className={`EventsList__item ${
+        (highlight && "highlight") || ""
+      }`} /*style={{ backgroundColor: event.color }} */
+      ref={(el) => el && scrollIntroView && onView && handleScroll(el)}
     >
       <div style={{ display: "flex", flexDirection: "column", flex: "1" }}>
         <span className="EventsList__item__title">{event.title}</span>
@@ -85,7 +145,7 @@ function EventsListItem({
         </span>
       </div>
       <div>
-        <IconButton icon="edit" />
+        <IconButton icon="edit" onClick={onEdit} />
         <IconButton icon="delete" onClick={onRemove} />{" "}
       </div>
     </div>
