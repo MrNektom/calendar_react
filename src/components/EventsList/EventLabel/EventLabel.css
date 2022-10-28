@@ -8,6 +8,13 @@
   background-color: var(--accent-color);
 }
 
+.EventLabel.month {
+  display: block;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+}
+
 .EventLabel__tooltip {
   position: absolute;
   top: calc(100% + 8px);
@@ -26,6 +33,16 @@
   transition-duration: 0.3s;
 }
 
+.EventLabel.month .EventLabel__tooltip {
+  position: static;
+  top: unset;
+  left: unset;
+  transform: unset;
+  opacity: 1;
+  box-shadow: unset;
+  padding: 4px 8px;
+}
+
 .EventLabel:hover .EventLabel__tooltip {
   opacity: 1;
   transform: scale(1);
@@ -39,9 +56,15 @@
   border: 8px solid transparent;
   border-bottom-color: var(--accent-color);
 }
+.EventLabel.month .EventLabel__tooltip::before {
+  content: unset;
+}
 
 .EventLabel__tooltip__title {
   font-size: 20px;
+}
+.EventLabel.month .EventLabel__tooltip__title {
+  font-size: medium;
 }
 
 .EventLabel__tooltip__description {

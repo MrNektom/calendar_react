@@ -81,7 +81,7 @@ function EventsLabels({
             d.getHours() === hours
         )
         .map(([_, ev]) => (
-          <EventLabel key={ev.id} event={ev} />
+          <EventLabel variant="week" key={ev.id} event={ev} />
         ))}
     </>
   );

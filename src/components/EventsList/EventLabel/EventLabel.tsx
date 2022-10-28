@@ -4,15 +4,25 @@ import { IUserEvent } from "../../../store/store";
 import { eventShows } from "../EventsList";
 import "./EventLabel.css";
 
-export function EventLabel({ event }: { event: IUserEvent }) {
+interface IEventLabelProps {
+  variant: "week" | "month";
+  event: IUserEvent;
+}
+
+export function EventLabel({ event, variant = "week" }: IEventLabelProps) {
   const showEvent = useEvent(eventShows);
   return (
-    <div className="EventLabel" onClick={() => showEvent(event.id)}>
+    <div
+      className={`EventLabel ${variant}`}
+      onClick={() => showEvent(event.id)}
+    >
       <div className="EventLabel__tooltip">
         <div className="EventLabel__tooltip__title">{event.title}</div>
-        <div className="EventLabel__tooltip__description">
-          {event.description}
-        </div>
+        {variant == "week" && (
+          <div className="EventLabel__tooltip__description">
+            {event.description}
+          </div>
+        )}
       </div>
     </div>
   );
