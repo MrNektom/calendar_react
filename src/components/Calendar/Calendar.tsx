@@ -1,9 +1,9 @@
-import { useStore } from "effector-react";
+import "./Calendar.css";
 import React, { useRef, useState } from "react";
+import { useStore } from "effector-react";
 import { match } from "ts-pattern";
 import { $layoutType, $targetDate } from "../../store/store";
-import { range } from "../../utils/range";
-import "./Calendar.css";
+import { MonthLayout } from "./MonthLayout/MonthLayout";
 import { WeekLayout } from "./WeekLayout/WeekLayout";
 
 export function Calendar() {
@@ -15,32 +15,15 @@ export function Calendar() {
     <div className={`Calendar ${scrolled ? "scrolled" : ""}`} ref={ref}>
       {match(layoutType)
         .with("week", () => <WeekLayout date={targetDate} />)
-        .with("month", () => <CalendarMonthLayout />)
-        .with("year", () => <CalendarYearLayout />)
+        .with("month", () => <MonthLayout date={targetDate} />)
+        .with("year", () => <YearLayout />)
         .exhaustive()}
     </div>
   );
 }
 
-function CalendarMonthLayout() {
-  return (
-    <>
-      <WeekRow />
-    </>
-  );
-}
-function CalendarYearLayout() {
+function YearLayout() {
   return <></>;
-}
-
-function WeekRow() {
-  return (
-    <div className="WeekRow">
-      {weekdays.map((day) => (
-        <div key={day}>{day}</div>
-      ))}
-    </div>
-  );
 }
 
 function useScrolled() {
@@ -84,9 +67,3 @@ export const weekdays = (() => {
   }
   return list;
 })();
-
-function weekCount(year: number, month: number): number {
-  const first = new Date(year, month, 1).getDay();
-  const last = new Date(year, month + 1, 0).getDate();
-  return Math.ceil((first + last) / 7);
-}

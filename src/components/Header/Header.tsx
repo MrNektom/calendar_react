@@ -6,6 +6,7 @@ import {
   nextPeriod,
   prevPeriod,
   TLayoutType,
+  todayDate,
 } from "../../store/store";
 import { IconButton } from "../IconButton/IconButton";
 import { PeriodLabel } from "../PeriodLabel/PeriodLabel";
@@ -14,6 +15,7 @@ import "./Header.css";
 export function Header() {
   const goToNextPeriod = useEvent(nextPeriod);
   const goToPrevPeriod = useEvent(prevPeriod);
+  const goToToday = useEvent(todayDate);
   const changeLayout = useEvent(layoutTypeChanged);
   function selectLayoutType(i: number) {
     changeLayout(
@@ -28,7 +30,7 @@ export function Header() {
   return (
     <div className="Header">
       <span className="Header__title">Calendar</span>
-      <button>Today</button>
+      <button onClick={() => goToToday()}>Today</button>
       <IconButton icon="chevron_left" onClick={() => goToPrevPeriod()} />
       <PeriodLabel />
       <IconButton icon="chevron_right" onClick={() => goToNextPeriod()} />

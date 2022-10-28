@@ -14,11 +14,3 @@
 .Calendar::-webkit-scrollbar-thumb {
   background-color: #ccc;
 }
-.WeekRow {
-  display: flex;
-}
-
-.WeekRow > * {
-  flex: 1;
-  text-align: center;
-}

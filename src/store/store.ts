@@ -18,8 +18,11 @@ export const $eventsList = createStore<IUserEvent[]>(
 );
 
 export const layoutTypeChanged = createEvent<TLayoutType>();
+
 export const nextPeriod = createEvent();
 export const prevPeriod = createEvent();
+export const todayDate = createEvent();
+
 export const eventAdded = createEvent<IUserEvent>();
 export const eventRemoved = createEvent<number>();
 export const eventEdited = createEvent<[number, IUserEvent]>();
@@ -35,6 +38,16 @@ $targetDate.on(nextPeriod, (date) =>
     .with("year", () => computeNextYear(date))
     .exhaustive()
 );
+
+$targetDate.on(prevPeriod, (date) =>
+  match<TLayoutType, Date>($layoutType.getState())
+    .with("week", () => computePrevWeek(date))
+    .with("month", () => computePrevMonth(date))
+    .with("year", () => computePrevYear(date))
+    .exhaustive()
+);
+
+$targetDate.on(todayDate, () => new Date());
 
 function computeNextWeek(date: Date): Date {
   const newDate = new Date(date.getTime());
@@ -53,14 +66,6 @@ function computeNextYear(date: Date): Date {
 
   return newDate;
 }
-
-$targetDate.on(prevPeriod, (date) =>
-  match<TLayoutType, Date>($layoutType.getState())
-    .with("week", () => computePrevWeek(date))
-    .with("month", () => computePrevMonth(date))
-    .with("year", () => computePrevYear(date))
-    .exhaustive()
-);
 
 function computePrevWeek(date: Date): Date {
   const newDate = new Date(date.getTime());
