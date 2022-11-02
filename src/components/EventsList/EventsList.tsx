@@ -17,23 +17,23 @@ import "./EventsList.css";
 
 let last_id = lid;
 
-export const $evtToShow = createStore<number>(-1);
-export const eventShows = createEvent<number>();
+interface IEventListProps {
+  eventShow?: number;
+  onShowEvent?: (id: number) => void;
+}
 
-$evtToShow.on(eventShows, (_, id) => id);
-
-export function EventsList() {
+export function EventsList({
+  eventShow = -1,
+  onShowEvent: onView,
+}: IEventListProps) {
   const [showDialog, setShowDialog] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [editing, setEditing] = useState<[number, IUserEvent] | null>(null);
   const events = useStore($eventsList);
-  const evtToShow = useStore($evtToShow);
   const addEvent = useEvent(eventAdded);
   const removeEvent = useEvent(eventRemoved);
   const editEvent = useEvent(eventEdited);
-
-  const showEvent = useEvent(eventShows);
 
   function handleAddEvent() {
     setShowDialog(false);
@@ -93,10 +93,10 @@ export function EventsList() {
         <EventsListItem
           key={e.id}
           event={e}
-          scrollIntroView={e.id === evtToShow}
+          scrollIntroView={e.id === eventShow}
           onRemove={() => removeEvent(i)}
           onEdit={() => startEditing(i)}
-          onView={() => showEvent(-1)}
+          onView={() => onView?.call(null, -1)}
         />
       ))}
     </div>

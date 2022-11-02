@@ -37,6 +37,7 @@
   position: static;
   top: unset;
   left: unset;
+  width: fit-content;
   transform: unset;
   opacity: 1;
   box-shadow: unset;

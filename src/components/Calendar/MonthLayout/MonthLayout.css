@@ -9,7 +9,11 @@
 .MonthTable {
   display: grid;
   grid-auto-rows: 1fr;
-  max-height: calc(100% - 50px);
+}
+
+.MonthTable__EventLabelPopup {
+  display: flex;
+  flex-direction: column;
 }
 
 .MonthWeek {
@@ -56,6 +60,31 @@
   height: 0;
   width: 0;
 }
+
+.MonthTableCell__event_labels .event_indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+}
+.MonthTableCell__event_labels .event_indicator_wrapper {
+  display: inline-block;
+  line-height: 10px;
+  width: 10px;
+  height: 10px;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+.MonthTableCell__event_labels .event_indicator_wrapper:hover {
+  background-color: #0004;
+}
+
+.MonthTableCell__event_labels .event_indicator_wrapper:active {
+  background-color: #0006;
+}
+
 .WeekRow {
   display: flex;
   border-bottom: 1px solid #ccc;

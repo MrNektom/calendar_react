@@ -7,7 +7,12 @@ import { EventLabel } from "../../EventsList/EventLabel/EventLabel";
 import { weekdays } from "../Calendar";
 import "./WeekLayout.css";
 
-export function WeekLayout({ date }: { date: Date }) {
+interface IWeekLayoutProps {
+  date: Date;
+  onShowEvent?: (id: number) => void;
+}
+
+export function WeekLayout({ date, onShowEvent }: IWeekLayoutProps) {
   const eventsList = useStore($eventsList);
   const now = new Date();
   const [days, today] = computeWeekdays(date);
@@ -43,6 +48,7 @@ export function WeekLayout({ date }: { date: Date }) {
                     date={days[x - 1]}
                     events={eventsList}
                     hours={y}
+                    onShowEvent={onShowEvent}
                   />
                 )}
               </div>
@@ -60,12 +66,14 @@ function EventsLabels({
   date,
   hours,
   events,
+  onShowEvent,
 }: {
   year: number;
   month: number;
   date: number;
   hours: number;
   events: IUserEvent[];
+  onShowEvent?: (id: number) => void;
 }) {
   const evList = events.map(
     (ev) => [new Date(ev.date), ev] as [Date, IUserEvent]
@@ -81,7 +89,12 @@ function EventsLabels({
             d.getHours() === hours
         )
         .map(([_, ev]) => (
-          <EventLabel variant="week" key={ev.id} event={ev} />
+          <EventLabel
+            variant="week"
+            key={ev.id}
+            event={ev}
+            onShowEvent={onShowEvent}
+          />
         ))}
     </>
   );

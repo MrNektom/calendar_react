@@ -6,7 +6,11 @@ import { $layoutType, $targetDate } from "../../store/store";
 import { MonthLayout } from "./MonthLayout/MonthLayout";
 import { WeekLayout } from "./WeekLayout/WeekLayout";
 
-export function Calendar() {
+interface ICalendarProps {
+  onShowEvent?: (id: number) => void;
+}
+
+export function Calendar({ onShowEvent }: ICalendarProps) {
   const { scrolled, ref } = useScrolled();
   const layoutType = useStore($layoutType);
   const targetDate = useStore($targetDate);
@@ -14,7 +18,9 @@ export function Calendar() {
   return (
     <div className={`Calendar ${scrolled ? "scrolled" : ""}`} ref={ref}>
       {match(layoutType)
-        .with("week", () => <WeekLayout date={targetDate} />)
+        .with("week", () => (
+          <WeekLayout date={targetDate} onShowEvent={onShowEvent} />
+        ))
         .with("month", () => <MonthLayout date={targetDate} />)
         .with("year", () => <YearLayout />)
         .exhaustive()}
