@@ -32,8 +32,8 @@ export function Header() {
       <span className="Header__title">Calendar</span>
       <button onClick={() => goToToday()}>Today</button>
       <IconButton icon="chevron_left" onClick={() => goToPrevPeriod()} />
-      <PeriodLabel />
       <IconButton icon="chevron_right" onClick={() => goToNextPeriod()} />
+      <PeriodLabel />
       <div style={{ flex: "1" }}></div>
       <Select onSelected={selectLayoutType}>
         <span>Week</span>

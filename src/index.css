@@ -4,6 +4,8 @@
 
   --accent-color: #519cff;
 
+  --border-color: #444;
+
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
@@ -69,10 +71,16 @@ button:active {
   background-color: #333;
 }
 
+::selection {
+  background-color: #0003;
+  color: #000;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     --fg-color: #213547;
     --bg-color: #ffffff;
+    --border-color: #ccc;
   }
   a:hover {
     color: #747bff;

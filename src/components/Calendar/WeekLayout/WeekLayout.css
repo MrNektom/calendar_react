@@ -9,7 +9,7 @@
 .WeekLayout__content > .row {
   display: flex;
   min-height: 50px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .WeekLayout__content > .row > .cell {
@@ -18,7 +18,7 @@
 
 .WeekLayout__content > .row .cell:not(:first-child) {
   flex: 1;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid var(--border-color);
 }
 
 .WeekLayout__content > .row .cell:first-child {
@@ -57,8 +57,9 @@
   position: sticky;
   top: 0;
   left: 0;
-  background-color: #fff9;
-  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 1;
   transition-property: border, box-shadow, background-color;
   transition-duration: 0.2s;
 }
@@ -117,4 +118,14 @@
 
 .WeekLayout__header__cell.timezone_cell {
   flex-direction: column-reverse;
+}
+
+@media (prefers-color-scheme: dark) {
+  .WeekLayout__header {
+    background-color: #3339;
+  }
+  .scrolled .WeekLayout__header {
+    box-shadow: unset;
+    background-color: #333;
+  }
 }

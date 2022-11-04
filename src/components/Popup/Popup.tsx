@@ -13,6 +13,7 @@ import {
   TransitionStatus,
 } from "react-transition-group";
 import { match, P } from "ts-pattern";
+import { Show } from "../Show";
 
 interface IPopupProps {
   show: boolean;
@@ -27,70 +28,88 @@ const styles: Partial<Record<TransitionStatus, CSSProperties>> = {
   entered: { opacity: 1, overflowY: "auto", transform: "scale(1)" },
   exiting: { opacity: 0, overflow: "hidden", transform: "scale(0.5)" },
   exited: { opacity: 0, transform: "scale(0.5)" },
-  unmounted: { transform: "scale(0.5)" },
 };
 
 export function Popup({ show, children, anchor, onHide }: IPopupProps) {
+  const [mounted, setMounted] = useState(false);
+  const [inFlag, setInFlag] = useState(false);
+  const [size, setSize] = useState({ w: 0, h: 0 });
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+
   const contentRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const [size, setSize] = useState({ w: 0, h: 0 });
-  const { x, y } = anchor?.current?.getBoundingClientRect() || { x: 0, y: 0 };
-  const { width = 0, height = 0 } =
-    popupRef.current?.getBoundingClientRect() || { width: 0, height: 0 };
-
-  useEffect(() => {
-    if (contentRef.current) {
-      const { width, height } = contentRef.current.getBoundingClientRect();
-      setSize({ w: width, h: height });
-    }
-  }, [contentRef.current, show]);
 
   useLayoutEffect(() => {
-    console.log(x, y);
-  }, [x, y]);
+    let w = 0,
+      h = 0;
+    if (popupRef.current) {
+      const { width, height } = popupRef.current.getBoundingClientRect();
+      setSize({ w: width, h: height });
+      w = width;
+      h = height;
+    }
+    if (anchor && anchor.current) {
+      let { x, y } = anchor.current.getBoundingClientRect();
+      if (y + h > innerHeight) {
+        y = innerHeight - h;
+      }
+      if (x + w > innerWidth) {
+        x = innerWidth - w;
+      }
+      setCoords({ x, y });
+    }
+    if (mounted) {
+      setInFlag(true);
+    }
+  }, [mounted]);
+
+  useEffect(() => {
+    if (show) {
+      setMounted(true);
+    } else {
+      setInFlag(false);
+    }
+  }, [show]);
 
   return (
     <Portal>
-      <CSSTransition
-        in={show}
-        nodeRef={overlayRef}
-        addEndListener={(end) =>
-          overlayRef.current?.addEventListener("transitionend", end)
-        }
-        unmountOnExit
-        mountOnEnter
-      >
-        <div className="Popup__overlay" ref={overlayRef} onClick={onHide}></div>
-      </CSSTransition>
-      <Transition
-        in={show}
-        addEndListener={(end) =>
-          popupRef.current?.addEventListener("transitionend", end)
-        }
-        nodeRef={popupRef}
-        unmountOnExit
-        mountOnEnter
-      >
-        {(state) => {
-          return (
-            <div
-              ref={popupRef}
-              className="Popup"
-              style={{
-                ...styles[state],
-                left: `${(x / innerWidth) * 100}%`,
-                top: `${(y / innerHeight) * 100}%`,
-                transformOrigin: "left top",
-              }}
-            >
-              <div className="Popup__content" ref={contentRef}>
-                {children}
-              </div>
+      <Show cond={mounted}>
+        <CSSTransition
+          in={inFlag}
+          nodeRef={overlayRef}
+          addEndListener={(end) =>
+            overlayRef.current?.addEventListener("transitionend", end)
+          }
+        >
+          <div
+            className="Popup__overlay"
+            ref={overlayRef}
+            onClick={onHide}
+          ></div>
+        </CSSTransition>
+        <CSSTransition
+          in={inFlag}
+          addEndListener={(end) =>
+            popupRef.current?.addEventListener("transitionend", end)
+          }
+          nodeRef={popupRef}
+          onExited={() => setMounted(false)}
+        >
+          <div
+            ref={popupRef}
+            className="Popup"
+            style={{
+              left: `${coords.x}px`,
+              top: `${coords.y}px`,
+            }}
+          >
+            <div className="Popup__content" ref={contentRef}>
+              {children}
             </div>
-          );
-        }}
-      </Transition>
+          </div>
+        </CSSTransition>
+      </Show>
     </Portal>
   );
 }

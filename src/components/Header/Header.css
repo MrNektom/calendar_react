@@ -5,7 +5,7 @@
   place-items: center;
   grid-column-start: 1;
   grid-column-end: 3;
-  border-bottom: 1px solid rgb(204, 204, 204);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .Header__title {

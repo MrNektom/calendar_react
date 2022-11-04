@@ -14,7 +14,7 @@
   top: 8px;
   left: 0;
   margin: 8px;
-  box-shadow: 0px -40px 10px 50px #fff;
+  box-shadow: 0px -40px 10px 50px var(--bg-color);
 }
 
 .EventsList__item {

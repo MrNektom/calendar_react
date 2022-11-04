@@ -1,6 +1,6 @@
 .Calendar {
   flex: 1;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid var(--border-color);
   height: 100%;
   overflow-y: auto;
   scrollbar-width: auto;

@@ -19,7 +19,7 @@
 .MonthWeek {
   display: flex;
   flex: 1;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .MonthTableCell {
@@ -27,7 +27,7 @@
   grid-template-rows: auto 1fr;
   flex: 1;
   text-align: center;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid var(--border-color);
   padding-top: 3px;
 }
 .MonthTableCell:first-child {
@@ -40,11 +40,12 @@
   width: 30px;
   height: 30px;
   line-height: 30px;
-  color: #0006;
+  color: var(--fg-color);
+  opacity: 0.5;
 }
 
 .MonthTableCell.current_month .MonthTableCell__date_span {
-  color: black;
+  opacity: 1;
 }
 
 .MonthTableCell.today.current_month .MonthTableCell__date_span {
@@ -87,11 +88,20 @@
 
 .WeekRow {
   display: flex;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .WeekRow > * {
   flex: 1;
   text-align: center;
   padding: 8px 0px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .MonthTableCell__event_labels .event_indicator_wrapper:hover {
+    background-color: #fff4;
+  }
+  .MonthTableCell__event_labels .event_indicator_wrapper:active {
+    background-color: #fff6;
+  }
 }
