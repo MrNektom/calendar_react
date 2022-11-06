@@ -1,18 +1,7 @@
-import React, {
-  CSSProperties,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Portal } from "../Portal";
 import "./Popup.css";
-import {
-  CSSTransition,
-  Transition,
-  TransitionStatus,
-} from "react-transition-group";
-import { match, P } from "ts-pattern";
+import { CSSTransition } from "react-transition-group";
 import { Show } from "../Show";
 
 interface IPopupProps {
@@ -22,13 +11,6 @@ interface IPopupProps {
   children?: JSX.Element | JSX.Element[] | string | null;
   onHide?: () => void;
 }
-
-const styles: Partial<Record<TransitionStatus, CSSProperties>> = {
-  entering: { opacity: 1, overflow: "hidden", transform: "scale(1)" },
-  entered: { opacity: 1, overflowY: "auto", transform: "scale(1)" },
-  exiting: { opacity: 0, overflow: "hidden", transform: "scale(0.5)" },
-  exited: { opacity: 0, transform: "scale(0.5)" },
-};
 
 export function Popup({ show, children, anchor, onHide }: IPopupProps) {
   const [mounted, setMounted] = useState(false);
@@ -52,10 +34,10 @@ export function Popup({ show, children, anchor, onHide }: IPopupProps) {
     if (anchor && anchor.current) {
       let { x, y } = anchor.current.getBoundingClientRect();
       if (y + h > innerHeight) {
-        y = innerHeight - h;
+        y = innerHeight - h - 10;
       }
       if (x + w > innerWidth) {
-        x = innerWidth - w;
+        x = innerWidth - w - 10;
       }
       setCoords({ x, y });
     }

@@ -11,12 +11,12 @@ interface IEventLabelProps {
 export function EventLabel({
   event,
   variant = "week",
-  onShowEvent: onEventShow,
+  onShowEvent,
 }: IEventLabelProps) {
   return (
     <div
       className={`EventLabel ${variant}`}
-      onClick={() => onEventShow?.call(null, event.id)}
+      onClick={() => onShowEvent?.call(null, event.id)}
     >
       <div className="EventLabel__tooltip">
         <div className="EventLabel__tooltip__title">{event.title}</div>

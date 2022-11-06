@@ -1,0 +1,50 @@
+.YearLayout {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 50px;
+  gap: auto;
+  box-sizing: border-box;
+}
+
+.YearMonth {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.YearMonth__date_table {
+  display: grid;
+  grid-template-columns: repeat(7, 30px);
+  grid-auto-rows: 30px;
+  justify-content: center;
+}
+
+.YearMonth__date_table__cell {
+  text-align: center;
+}
+
+.YearMonth__date_table__cell.other_month {
+  opacity: 0.5;
+}
+.YearMonth__date_table__cell .date_span {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 50%;
+}
+.YearMonth__date_table__cell.today:not(.other_month) .date_span {
+  color: white;
+  background-color: var(--accent-color);
+}
+
+.YearMonth__date_table__cell.has_events .date_span {
+  outline: 2px solid var(--accent-dark-color);
+}
+
+@media (max-width: 1200px) {
+  .YearLayout {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,6 +1,7 @@
 import { createEvent, createStore } from "effector";
 import { useEvent, useStore } from "effector-react";
 import React, { useState } from "react";
+import DatePicker from "react-date-picker";
 import {
   $eventsList,
   eventAdded,
@@ -29,6 +30,7 @@ export function EventsList({
   const [showDialog, setShowDialog] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [date, setDate] = useState(new Date());
   const [editing, setEditing] = useState<[number, IUserEvent] | null>(null);
   const events = useStore($eventsList);
   const addEvent = useEvent(eventAdded);
@@ -48,14 +50,14 @@ export function EventsList({
           description,
           id: editing[1].id,
           color: editing[1].color,
-          date: editing[1].date,
+          date: date.getTime(),
         },
       ]);
     } else
       addEvent({
         id: ++last_id,
         title,
-        date: Date.now(),
+        date: new Date(date).getTime(),
         description,
         color: `hsl(${Math.round(Math.random() * 360)}, 100%, 45%)`,
       });
@@ -71,12 +73,14 @@ export function EventsList({
     setEditing([index, events[index]]);
     setTitle(events[index].title);
     setDescription(events[index].description);
+    setDate(new Date(events[index].date));
     setShowDialog(true);
   }
   return (
     <div className="EventsList">
       <Dialog show={showDialog} onOk={handleAddEvent} onCancel={handleCancel}>
         <TextField value={title} onInput={(value) => setTitle(value)} />
+        <DatePicker value={date} onChange={(d: Date) => setDate(d)} />
         <TextArea
           value={description}
           onInput={(value) => setDescription(value)}
@@ -150,4 +154,8 @@ function EventsListItem({
       </div>
     </div>
   );
+}
+
+function formatDate(date: Date): string {
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 }

@@ -2,6 +2,7 @@ import { useStore } from "effector-react";
 import React from "react";
 import { match } from "ts-pattern";
 import { $eventsList, IUserEvent } from "../../../store/store";
+import { classes } from "../../../utils/classes";
 import { range } from "../../../utils/range";
 import { EventLabel } from "../../EventsList/EventLabel/EventLabel";
 import { weekdays } from "../Calendar";
@@ -16,6 +17,8 @@ export function WeekLayout({ date, onShowEvent }: IWeekLayoutProps) {
   const eventsList = useStore($eventsList);
   const now = new Date();
   const [days, today] = computeWeekdays(date);
+  console.log("today", today);
+
   return (
     <div className="WeekLayout">
       <div className="WeekLayout__header">
@@ -111,9 +114,11 @@ function WeekLayoutHeaderCell({
 }) {
   return (
     <div
-      className={`WeekLayout__header__cell ${(isToday && "today") || ""} ${
-        (x === 0 && "timezone_cell") || ""
-      }`.trim()}
+      className={classes({
+        WeekLayout__header__cell: true,
+        today: isToday,
+        timezone_cell: x === 0,
+      })}
     >
       {x === 0 ? (
         <>
@@ -144,9 +149,10 @@ function getTimeZone() {
 }
 
 function computeWeekdays(date: Date): [number[], number] {
+  const day = date.getDay() == 0 ? 7 : date.getDay();
   const days: number[] = [];
   const n_date = new Date(date.getTime());
-  n_date.setDate(date.getDate() - date.getDay());
+  n_date.setDate(date.getDate() - day);
 
   for (let i = 0; i < 7; i++) {
     n_date.setDate(n_date.getDate() + 1);
@@ -160,7 +166,10 @@ function computeWeekdays(date: Date): [number[], number] {
     date.getMonth() === now.getMonth() &&
     date.getDate() === now.getDate()
   ) {
-    today = date.getDay() - 1;
+    today = now.getDay() - 1;
+    if (today === -1) {
+      today = 6;
+    }
   }
   return [days, today];
 }

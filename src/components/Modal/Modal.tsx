@@ -28,7 +28,7 @@ export function Modal({
               left: "0",
               width: "100%",
               height: "100%",
-              backgroundColor: "#0000",
+              backgroundColor: "#0003",
               zIndex: "10000",
               ...style,
             }}

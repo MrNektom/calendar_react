@@ -5,6 +5,7 @@ import { match } from "ts-pattern";
 import { $layoutType, $targetDate } from "../../store/store";
 import { MonthLayout } from "./MonthLayout/MonthLayout";
 import { WeekLayout } from "./WeekLayout/WeekLayout";
+import { YearLayout } from "./YearLayout/YearLayout";
 
 interface ICalendarProps {
   onShowEvent?: (id: number) => void;
@@ -21,15 +22,13 @@ export function Calendar({ onShowEvent }: ICalendarProps) {
         .with("week", () => (
           <WeekLayout date={targetDate} onShowEvent={onShowEvent} />
         ))
-        .with("month", () => <MonthLayout date={targetDate} />)
-        .with("year", () => <YearLayout />)
+        .with("month", () => (
+          <MonthLayout date={targetDate} onShowEvent={onShowEvent} />
+        ))
+        .with("year", () => <YearLayout onShowEvent={onShowEvent} />)
         .exhaustive()}
     </div>
   );
-}
-
-function YearLayout() {
-  return <></>;
 }
 
 function useScrolled() {
